@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
 
 
-
 /* @author Gavin Moulton
  *
  * date
@@ -34,29 +33,36 @@ class DefaultController extends Controller
         $data = json_decode($dataHackerNews);
 
         $data = array_slice($data,0,10);
-        // hacker news
+
         foreach($data as $item) {
 
-            //var_dump($item);
         $content = $this->feedAction('https://hacker-news.firebaseio.com/v0/item/' . $item .'.json','json');
 
         $dataContent = json_decode($content,true);
 
-        var_dump($dataContent);
-        echo $dataContent['title'];
-        // get summary
-            echo $dataContent['url'];
-            echo $dataContent['time'];
+       // var_dump($dataContent);
+       // echo $dataContent['title'];
+        //    echo $dataContent['url'];
+         //   echo $dataContent['time'];
 
         }
 
         // bbc
-
         $bbc = $this->feedAction('http://feeds.bbci.co.uk/news/technology/rss.xml','xml');
 
-        $bbcContent = simplexml_load_string($bbc);
+        $bbc = new \SimpleXMLElement($bbc,true);
 
-        foreach ($bbcContent)
+        $bbcContents = json_decode(json_encode($bbc),true);
+
+
+        foreach ($bbcContents['channel']['item'] as $bbcContent) {
+
+          echo $bbcContent['link'];
+          echo   $bbcContent['pubDate'];
+         // get title from content
+
+            echo '<br><br><br>';
+        }
 
         return 'yes';
     }
