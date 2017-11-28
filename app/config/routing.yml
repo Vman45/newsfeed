@@ -1,0 +1,5 @@
+newsfeed:
+    resource: "@newsfeedBundle/Resources/config/routing.yml"
+    prefix:   /
+
+

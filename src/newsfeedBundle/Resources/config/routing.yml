@@ -1,0 +1,3 @@
+newsfeed_homepage:
+    path:     /
+    defaults: { _controller: newsfeedBundle:Default:index }
