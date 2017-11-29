@@ -4,8 +4,8 @@ namespace newsfeedBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Client;
 
 
@@ -54,15 +54,20 @@ class DefaultController extends Controller
 
         $bbcContents = json_decode(json_encode($bbc),true);
 
-
         foreach ($bbcContents['channel']['item'] as $bbcContent) {
 
-          echo $bbcContent['link'];
-          echo   $bbcContent['pubDate'];
+         // echo $bbcContent['link'];
+        //  echo $bbcContent['pubDate'];
          // get title from content
 
-            echo '<br><br><br>';
         }
+
+        // slashddot
+        $slashDot = $this->feedAction('https://slashdot.org','dom');
+
+        $slashNews = $this->domAction($slashDot);
+
+
 
         return 'yes';
     }
@@ -91,8 +96,17 @@ class DefaultController extends Controller
 
     }
 
+    public function domAction($content) {
+
+     $crawler = new Crawler($content);
+
+     $crawler->filterXPath('//div[@id="firehose"]//h2')->each(function (Crawler $node) use (&$results) {
+
+     var_dump(trim($node->text()));
+
+  });
 
 
-
+    }
 
 }
