@@ -2,12 +2,12 @@
 
 namespace newsfeedBundle\Controller;
 
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Client;
-
 
 /* @author Gavin Moulton
  *
@@ -40,10 +40,24 @@ class DefaultController extends Controller
 
         $dataContent = json_decode($content,true);
 
-       // var_dump($dataContent);
-       // echo $dataContent['title'];
-        //    echo $dataContent['url'];
-         //   echo $dataContent['time'];
+        $sql = "INSERT into feed(date,title,url) VALUES (?,?,?)";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $connection = $em->getConnection();
+
+            $statement = $connection->prepare($sql);
+
+            $currentTime = \DateTime::createFromFormat('U',$dataContent['time']);
+
+            $dateIs = $currentTime->format('Y-m-d H:m:i');
+
+            $statement->bindParam(1, $dateIs);
+            $statement->bindParam(2,$dataContent['title']);
+            //$statement->bindParam(3,'summary");
+            $statement->bindParam(3,$dataContent["url"]);
+
+            $statement->execute();
 
         }
 
@@ -66,8 +80,6 @@ class DefaultController extends Controller
         $slashDot = $this->feedAction('https://slashdot.org','dom');
 
         $slashNews = $this->domAction($slashDot);
-
-
 
         return 'yes';
     }
@@ -104,7 +116,7 @@ class DefaultController extends Controller
 
      var_dump(trim($node->text()));
 
-  });
+     });
 
 
     }
