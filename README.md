@@ -18,5 +18,5 @@ if you don't have composer installed run 'curl -sS https://getcomposer.org/insta
 * change the parameters.yml file to include your database name and password
 
 * bin/console doctrine:schema:update --force 
-will create the database schema for you
+will create the database schema 
 =======
